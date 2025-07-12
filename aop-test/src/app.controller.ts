@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Query,
+  UseFilters,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -10,8 +11,10 @@ import { AppService } from './app.service';
 import { LoginGuard } from './login.guard';
 import { TimeInterceptor } from './time.interceptor';
 import { ValidatePipe } from './validate.pipe';
+import { TestFilter } from './test.filter';
 
 @Controller()
+// @UseFilters(TestFilter) // Apply TestFilter globally
 // @UsePipes(ValidatePipe) // Apply ValidatePipe globally
 // @UseGuards(LoginGuard) // Apply LoginGuard globally
 // @UseInterceptors(TimeInterceptor) // Apply TimeInterceptor globally
@@ -46,6 +49,13 @@ export class AppController {
   @Get('test4')
   getTest4(@Query('num') num: number) {
     console.log('getTest3 called');
+    return num + 1;
+  }
+
+  @Get('test5')
+  // @UseFilters(TestFilter)
+  getTest5(@Query('num', ValidatePipe) num: number) {
+    console.log('getTest5 called');
     return num + 1;
   }
 }

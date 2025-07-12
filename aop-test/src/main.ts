@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { NextFunction, Request } from 'express';
 import { TimeInterceptor } from './time.interceptor';
 import { ValidatePipe } from './validate.pipe';
+import { TestFilter } from './test.filter';
 // import { LoginGuard } from './login.guard';
 
 async function bootstrap() {
@@ -14,6 +15,7 @@ async function bootstrap() {
     console.log('after:');
   });
 
+  // app.useGlobalFilters(new TestFilter()); // Apply TimeInterceptor globally
   // app.useGlobalPipes(new ValidatePipe()); // Apply ValidatePipe globally
   // app.useGlobalInterceptors(new TimeInterceptor());
   // app.useGlobalGuards(new LoginGuard());

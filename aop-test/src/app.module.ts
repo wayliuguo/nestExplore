@@ -6,6 +6,7 @@ import { AMModule } from './a-m/a-m.module';
 import { BMModule } from './b-m/b-m.module';
 import { TimeInterceptor } from './time.interceptor';
 import { ValidatePipe } from './validate.pipe';
+import { TestFilter } from './test.filter';
 // import { LoginGuard } from './login.guard';
 
 @Module({
@@ -13,6 +14,10 @@ import { ValidatePipe } from './validate.pipe';
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: 'APP_FILTER',
+      useClass: TestFilter, // Assuming TestFilter is defined in your project
+    },
     {
       provide: 'APP_INTERCEPTOR',
       useClass: TimeInterceptor,
