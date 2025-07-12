@@ -5,6 +5,7 @@ import { LogMiddleware } from './log.middleware';
 import { AMModule } from './a-m/a-m.module';
 import { BMModule } from './b-m/b-m.module';
 import { TimeInterceptor } from './time.interceptor';
+import { ValidatePipe } from './validate.pipe';
 // import { LoginGuard } from './login.guard';
 
 @Module({
@@ -15,6 +16,10 @@ import { TimeInterceptor } from './time.interceptor';
     {
       provide: 'APP_INTERCEPTOR',
       useClass: TimeInterceptor,
+    },
+    {
+      provide: 'APP_PIPE',
+      useClass: ValidatePipe,
     },
     // {
     //   provide: 'APP_GUARD',

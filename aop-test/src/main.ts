@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NextFunction, Request } from 'express';
+import { TimeInterceptor } from './time.interceptor';
+import { ValidatePipe } from './validate.pipe';
 // import { LoginGuard } from './login.guard';
 
 async function bootstrap() {
@@ -12,6 +14,8 @@ async function bootstrap() {
     console.log('after:');
   });
 
+  // app.useGlobalPipes(new ValidatePipe()); // Apply ValidatePipe globally
+  // app.useGlobalInterceptors(new TimeInterceptor());
   // app.useGlobalGuards(new LoginGuard());
   await app.listen(3000);
 }

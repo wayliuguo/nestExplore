@@ -1,9 +1,20 @@
-import { Controller, Get, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { LoginGuard } from './login.guard';
 import { TimeInterceptor } from './time.interceptor';
+import { ValidatePipe } from './validate.pipe';
 
 @Controller()
+// @UsePipes(ValidatePipe) // Apply ValidatePipe globally
+// @UseGuards(LoginGuard) // Apply LoginGuard globally
+// @UseInterceptors(TimeInterceptor) // Apply TimeInterceptor globally
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -24,5 +35,17 @@ export class AppController {
   getTest2(): string {
     console.log('getTest2 called');
     return this.appService.getTest2();
+  }
+
+  @Get('test3')
+  getTest3(@Query('num', ValidatePipe) num: number) {
+    console.log('getTest3 called');
+    return num + 1;
+  }
+
+  @Get('test4')
+  getTest4(@Query('num') num: number) {
+    console.log('getTest3 called');
+    return num + 1;
   }
 }
