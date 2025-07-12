@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { LogMiddleware } from './log.middleware';
 import { AMModule } from './a-m/a-m.module';
 import { BMModule } from './b-m/b-m.module';
-import { LoginGuard } from './login.guard';
+import { TimeInterceptor } from './time.interceptor';
+// import { LoginGuard } from './login.guard';
 
 @Module({
   imports: [AMModule, BMModule],
@@ -12,9 +13,13 @@ import { LoginGuard } from './login.guard';
   providers: [
     AppService,
     {
-      provide: 'APP_GUARD',
-      useClass: LoginGuard,
+      provide: 'APP_INTERCEPTOR',
+      useClass: TimeInterceptor,
     },
+    // {
+    //   provide: 'APP_GUARD',
+    //   useClass: LoginGuard,
+    // },
   ],
 })
 export class AppModule implements NestModule {
