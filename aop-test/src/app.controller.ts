@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { LoginGuard } from './login.guard';
 
 @Controller()
 export class AppController {
@@ -11,6 +12,7 @@ export class AppController {
   }
 
   @Get('test1')
+  @UseGuards(LoginGuard) // Apply LoginGuard to this route
   getTest1(): string {
     console.log('getTest1 called');
     return this.appService.getTest1();

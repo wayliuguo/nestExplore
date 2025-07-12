@@ -6,7 +6,7 @@ export class LogMiddleware implements NestMiddleware {
     console.log('before2', req.url);
 
     next();
-    
+
     console.log('after2');
-  } 
+  }
 }
