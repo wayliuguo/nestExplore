@@ -22,10 +22,10 @@ import { TestFilter } from './test.filter';
       provide: 'APP_INTERCEPTOR',
       useClass: TimeInterceptor,
     },
-    {
-      provide: 'APP_PIPE',
-      useClass: ValidatePipe,
-    },
+    // {
+    //   provide: 'APP_PIPE',
+    //   useClass: ValidatePipe,
+    // },
     // {
     //   provide: 'APP_GUARD',
     //   useClass: LoginGuard,

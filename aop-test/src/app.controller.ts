@@ -54,7 +54,8 @@ export class AppController {
 
   @Get('test5')
   // @UseFilters(TestFilter)
-  getTest5(@Query('num', ValidatePipe) num: number) {
+  @UsePipes(ValidatePipe) // Apply ValidatePipe to this route
+  getTest5(@Query('num') num: number) {
     console.log('getTest5 called');
     return num + 1;
   }
