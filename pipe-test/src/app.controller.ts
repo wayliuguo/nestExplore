@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
@@ -6,9 +7,12 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AaaPipe } from './aaa.pipe';
+import { Ooo } from './dto/ooo.dto';
 
 @Controller()
 export class AppController {
@@ -44,5 +48,10 @@ export class AppController {
     @Param('bbb', AaaPipe) bbb: string,
   ): string {
     return aaa + bbb;
+  }
+
+  @Post('ooo')
+  ooo(@Body(new ValidationPipe()) obj: Ooo) {
+    return obj;
   }
 }
