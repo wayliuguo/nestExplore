@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
+import { LoggerService } from 'src/shared/logger.service';
 
 @Injectable()
 export class CatsService {
+  constructor(private logger:LoggerService) {}
+
   create(createCatDto: CreateCatDto) {
     return `create cat: ${createCatDto.name}, ${createCatDto.age}, ${createCatDto.breed}`;
   }
@@ -13,6 +16,7 @@ export class CatsService {
   }
 
   findOne(id: number) {
+    this.logger.log(`Finding cat with id: ${id}`);
     return `This action returns a #${id} cat`;
   }
 
