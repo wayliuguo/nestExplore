@@ -5,7 +5,7 @@ import { LoggerService } from 'src/shared/logger.service';
 
 @Injectable()
 export class CatsService {
-  constructor(private logger:LoggerService) {}
+  constructor(private logger: LoggerService) {}
 
   create(createCatDto: CreateCatDto) {
     return `create cat: ${createCatDto.name}, ${createCatDto.age}, ${createCatDto.breed}`;

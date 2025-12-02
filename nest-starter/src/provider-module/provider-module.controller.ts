@@ -1,7 +1,4 @@
-import {
-  Controller,
-  Get
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ProviderModuleService } from './provider-module.service';
 
 @Controller('provider-module')
