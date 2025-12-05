@@ -1,11 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { DynamicDatabaseConnection } from './interfaces/db-connection.interface';
-import { DATABASE_CONNECTION } from './constants';
+import { DYNAMIC_DATABASE_CONNECTION } from './constants';
 
 @Injectable()
 export class DynamicDatabaseService {
   constructor(
-    @Inject(DATABASE_CONNECTION) private readonly connection: DynamicDatabaseConnection,
+    @Inject(DYNAMIC_DATABASE_CONNECTION)
+    private readonly connection: DynamicDatabaseConnection,
   ) {}
 
   // 查询（SELECT）

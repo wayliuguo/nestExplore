@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { DynamicDatabaseConfig } from './interfaces/db-config.interface';
 import { DynamicDatabaseConnection } from './interfaces/db-connection.interface';
-import { DATABASE_CONFIG, DATABASE_CONNECTION } from './constants';
+import {
+  DYNAMIC_DATABASE_CONFIG,
+  DYNAMIC_DATABASE_CONNECTION,
+} from './constants';
 import { MySQLConnection } from './connections/mysql.connection';
 import { PostgreSQLConnection } from './connections/postgres.connection';
 import { DynamicDatabaseService } from './dynamic-database.service';
@@ -29,13 +32,13 @@ export class DynamicDatabaseModule implements OnModuleDestroy {
   static forRoot(config: DynamicDatabaseConfig): DynamicModule {
     // 1. 注册数据库配置提供器
     const configProvider: Provider = {
-      provide: DATABASE_CONFIG,
+      provide: DYNAMIC_DATABASE_CONFIG,
       useValue: config,
     };
 
     // 2. 动态创建数据库连接提供器（核心逻辑）
     const connectionProvider: Provider = {
-      provide: DATABASE_CONNECTION,
+      provide: DYNAMIC_DATABASE_CONNECTION,
       useFactory: async (
         dbConfig: DynamicDatabaseConfig,
       ): Promise<DynamicDatabaseConnection> => {
@@ -57,7 +60,7 @@ export class DynamicDatabaseModule implements OnModuleDestroy {
         DynamicDatabaseModule.connection = connection; // 保存连接实例
         return connection;
       },
-      inject: [DATABASE_CONFIG], // 注入配置
+      inject: [DYNAMIC_DATABASE_CONFIG], // 注入配置
     };
 
     // 3. 返回动态模块配置
@@ -65,7 +68,7 @@ export class DynamicDatabaseModule implements OnModuleDestroy {
       module: DynamicDatabaseModule,
       global: true, // 全局模块：所有模块无需重复导入，直接注入
       providers: [configProvider, connectionProvider, DynamicDatabaseService],
-      exports: [DATABASE_CONNECTION, DynamicDatabaseService], // 导出供其他模块使用
+      exports: [DYNAMIC_DATABASE_CONNECTION, DynamicDatabaseService], // 导出供其他模块使用
     };
   }
 
@@ -94,7 +97,7 @@ export class DynamicDatabaseModule implements OnModuleDestroy {
         // 简单起见，我们仍然使用基础的DynamicDatabaseService
         return new DynamicDatabaseService(connection);
       },
-      inject: [DATABASE_CONNECTION],
+      inject: [DYNAMIC_DATABASE_CONNECTION],
       scope: Scope.REQUEST,
     };
 

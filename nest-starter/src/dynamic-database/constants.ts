@@ -1,2 +1,4 @@
-export const DATABASE_CONFIG = Symbol('DATABASE_CONFIG'); // 数据库配置令牌
-export const DATABASE_CONNECTION = Symbol('DATABASE_CONNECTION'); // 数据库连接实例令牌
+export const DYNAMIC_DATABASE_CONFIG = Symbol('DYNAMIC_DATABASE_CONFIG'); // 数据库配置令牌
+export const DYNAMIC_DATABASE_CONNECTION = Symbol(
+  'DYNAMIC_DATABASE_CONNECTION',
+); // 数据库连接实例令牌

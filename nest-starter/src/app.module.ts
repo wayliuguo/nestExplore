@@ -24,7 +24,7 @@ import { DynamicConfigService } from './dynamic-config/config.service';
     DbModule,
     UserModule,
     BookModule,
-    ConfigModule.forRoot(), // 添加 ConfigModule
+    ConfigModule.forRoot(), // nestjs 提供的配置模块
     DynamicConfigModule,
     DynamicDatabaseModule.forRoot(
       new DynamicConfigService(new ConfigService()).getDatabaseConfig(),
