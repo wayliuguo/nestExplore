@@ -35,24 +35,20 @@ export class MySQLConnection implements DynamicDatabaseConnection {
   }
 
   // 执行查询（SELECT）
-  async query(sql: string, params?: any[]): Promise<any[]> {
+  async query(sql: string, params?: any[]): Promise<any> {
     this.checkConnection();
     if (!this.isConnected) {
       console.warn('[MySQL] 无法执行查询，数据库未连接。');
-      return [];
+      return sql;
     }
-    
+
     console.log(`[MySQL] 模拟执行查询: ${sql}`);
     if (params && params.length > 0) {
       console.log(`[MySQL] 查询参数:`, params);
     }
-    
-    // 模拟查询结果
-    if (sql.toUpperCase().includes('SELECT') && sql.includes('cats')) {
-      return [{ id: 1, name: '小猫一号', age: 2, created_at: new Date() },
-              { id: 2, name: '小猫二号', age: 3, created_at: new Date() }];
-    }
-    return [{ id: 1, name: 'MySQL模拟数据项' }];
+
+    // 直接返回SQL字符串
+    return sql;
   }
 
   // 执行增删改（INSERT/UPDATE/DELETE）
@@ -62,12 +58,12 @@ export class MySQLConnection implements DynamicDatabaseConnection {
       console.warn('[MySQL] 无法执行操作，数据库未连接。');
       return 0;
     }
-    
+
     console.log(`[MySQL] 模拟执行操作: ${sql}`);
     if (params && params.length > 0) {
       console.log(`[MySQL] 操作参数:`, params);
     }
-    
+
     // 模拟操作成功，返回影响行数
     return 1;
   }

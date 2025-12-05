@@ -9,10 +9,11 @@ export class PigsService {
     @Inject('PIGS_DB_CONFIG') private readonly config: FeatureConfig,
   ) {}
 
-  // 只保留findOne方法，直接返回拼接好的数据库查询语句
+  // 使用dynamicDatabaseService执行查询，返回SQL字符串
   async findOne(id: number) {
     // 使用注入的配置来构建查询语句
     const tableName = this.config.tableName || 'pigs';
-    return `SELECT * FROM ${tableName} WHERE id = ${id}`;
+    const sql = `SELECT * FROM ${tableName} WHERE id = ${id}`;
+    return this.dynamicDatabaseService.query(sql, [id]);
   }
 }

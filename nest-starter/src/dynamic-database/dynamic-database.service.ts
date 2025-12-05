@@ -9,7 +9,7 @@ export class DynamicDatabaseService {
   ) {}
 
   // 查询（SELECT）
-  async query(sql: string, params?: any[]): Promise<any[]> {
+  async query(sql: string, params?: any[]): Promise<any> {
     return this.connection.query(sql, params);
   }
 }
