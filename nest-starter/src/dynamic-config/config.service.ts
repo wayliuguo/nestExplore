@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
-import { DynamicDatabaseConfig, DbType } from "src/dynamic-database/interfaces/db-config.interface";
+import {
+  DynamicDatabaseConfig,
+  DbType,
+} from 'src/dynamic-database/interfaces/db-config.interface';
 
 @Injectable()
 export class DynamicConfigService {
