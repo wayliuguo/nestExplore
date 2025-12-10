@@ -36,4 +36,12 @@ export class ConfigService {
   getDatabaseName(): string {
     return process.env.DB_NAME || 'test_db';
   }
+
+  getJwtSecret(): string {
+    return process.env.JWT_SECRET || 'my_dev_secret_key_123456';
+  }
+
+  getJwtExpiresIn(): string {
+    return process.env.JWT_EXPIRES_IN || '1h';
+  }
 }

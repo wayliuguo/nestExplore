@@ -3,11 +3,11 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { DbService } from 'src/db/db.service';
 import { User } from './entities/user.entity';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  @Inject(DbService)
-  dbService: DbService;
+  constructor(private dbService: DbService, private jwtService: JwtService) {}
 
   async register(registerUserDto: RegisterUserDto) {
     const users: User[] = await this.dbService.read();
@@ -23,6 +23,7 @@ export class UserService {
     const user = new User();
     user.username = registerUserDto.username;
     user.password = registerUserDto.password;
+    user.role = registerUserDto.role || 'user';
     users.push(user);
 
     await this.dbService.write(users);
@@ -44,6 +45,18 @@ export class UserService {
       throw new BadRequestException('密码不正确');
     }
 
-    return foundUser;
+    const accessToken = this.jwtService.sign(
+      {
+        username: foundUser.username,
+        role: foundUser.role,
+      },
+      {
+        expiresIn: '1h',
+      },
+    );
+
+    return {
+      accessToken,
+    };
   }
 }

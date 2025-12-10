@@ -28,6 +28,7 @@ import { CatsController } from './cats/cats.controller';
 import { DogsController } from './dogs/dogs.controller';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { SimpleLoggerMiddleware } from './common/middleware/logger/simple-logger.middleware';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -46,6 +47,18 @@ import { SimpleLoggerMiddleware } from './common/middleware/logger/simple-logger
     ),
     DogsModule,
     PigsModule,
+    // 全局注册JwtModule
+    JwtModule.registerAsync({
+      global: true,
+      imports: [NestConfigModule],
+      useFactory: (configService: NestConfigService) => ({
+        secret: configService.get('JWT_SECRET', 'default_secret_key'),
+        signOptions: { 
+          expiresIn: configService.get('JWT_EXPIRES_IN', '1h') 
+        },
+      }),
+      inject: [NestConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, LoggerMiddleware],
