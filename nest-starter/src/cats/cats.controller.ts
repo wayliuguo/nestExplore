@@ -9,12 +9,16 @@ import {
   HttpCode,
   Header,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
+import { TransformResponseInterceptor } from 'src/common/interceptor/transform-response.interceptor';
+import { CacheInterceptor } from 'src/common/interceptor/cache.interceptor';
 
 @Controller('cats')
+@UseInterceptors(TransformResponseInterceptor, new CacheInterceptor())
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
