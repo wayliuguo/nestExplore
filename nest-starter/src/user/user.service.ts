@@ -7,7 +7,10 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(private dbService: DbService, private jwtService: JwtService) {}
+  constructor(
+    private dbService: DbService,
+    private jwtService: JwtService,
+  ) {}
 
   async register(registerUserDto: RegisterUserDto) {
     const users: User[] = await this.dbService.read();
