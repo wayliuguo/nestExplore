@@ -17,7 +17,7 @@ export class CatsService {
 
   findOne(id: number) {
     this.logger.log(`Finding cat with id: ${id}`);
-    return `This action returns a #${id} cat`;
+    return `This action returns a ${typeof id}: #${id} cat`;
   }
 
   update(id: number, updateCatDto: UpdateCatDto) {
