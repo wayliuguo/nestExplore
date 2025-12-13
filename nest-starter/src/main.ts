@@ -8,7 +8,7 @@ import { TestInterceptor } from './common/interceptor/test.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // 启用 DTO 验证
   app.useGlobalPipes(new ValidationPipe()); // 管道：全局级别
 

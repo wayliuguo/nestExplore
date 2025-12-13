@@ -1,5 +1,4 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
-import { PhoneValidationPipe } from 'src/common/pipe/phone-validation.pipe';
 
 export class RegisterUserDto {
   @IsNotEmpty({ message: '用户名不能为空' })
