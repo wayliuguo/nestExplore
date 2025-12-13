@@ -16,9 +16,16 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { TransformResponseInterceptor } from 'src/common/interceptor/transform-response.interceptor';
 import { CacheInterceptor } from 'src/common/interceptor/cache.interceptor';
+import { TimeoutInterceptor } from 'src/common/interceptor/timeout.interceptor';
+import { LoggingInterceptor } from 'src/common/interceptor/logging.interceptor';
 
 @Controller('cats')
-@UseInterceptors(TransformResponseInterceptor, new CacheInterceptor())
+@UseInterceptors(
+  TransformResponseInterceptor,
+  new CacheInterceptor(),
+  new TimeoutInterceptor(5000),
+  LoggingInterceptor,
+)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
