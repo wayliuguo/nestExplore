@@ -1,5 +1,14 @@
-*.md
+# 源码目录（编译后已复制 dist，无需源码）
+src/
+# 依赖目录（构建阶段已安装，生产阶段重新安装）
 node_modules/
-.git/
-.vscode/
-.dockerignore
+# 日志目录（容器内动态生成）
+logs/
+# 临时文件
+*.log
+.DS_Store
+.git
+.gitignore
+.npmrc
+# 其他无关文件
+README.md
