@@ -1,5 +1,5 @@
 {
-  "name": "mysql2-test",
+  "name": "mysql-test",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
