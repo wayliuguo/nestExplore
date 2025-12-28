@@ -7,7 +7,6 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-
   @InjectEntityManager()
   private manager: EntityManager;
 
