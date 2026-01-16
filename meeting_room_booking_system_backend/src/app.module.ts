@@ -8,6 +8,9 @@ import { RolesModule } from './roles/roles.module';
 import { User } from './user/entities/user.entity';
 import { Role } from './roles/entities/role.entity';
 import { Permission } from './permissions/entities/permission.entity';
+import { RedisModule } from './redis/redis.module';
+import { EmailModule } from './email/email.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -30,6 +33,8 @@ import { Permission } from './permissions/entities/permission.entity';
     UserModule,
     PermissionsModule,
     RolesModule,
+    RedisModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
