@@ -10,7 +10,6 @@ import { Role } from './roles/entities/role.entity';
 import { Permission } from './permissions/entities/permission.entity';
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
-import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
