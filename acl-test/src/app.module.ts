@@ -13,7 +13,7 @@ import { RedisModule } from './redis/redis.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: '172.21.48.1',
       port: 3306,
       username: 'root',
       password: '123456',
