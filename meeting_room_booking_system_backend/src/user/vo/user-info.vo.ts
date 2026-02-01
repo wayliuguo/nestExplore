@@ -1,17 +1,17 @@
 export class UserDetailVo {
-    id: number;
+  id: number;
 
-    username: string;
+  username: string;
 
-    nickName: string;
+  nickName: string;
 
-    email: string;
+  email: string;
 
-    headPic: string;
+  headPic: string;
 
-    phoneNumber: string;
+  phoneNumber: string;
 
-    isFrozen: boolean;
+  isFrozen: boolean;
 
-    createTime: Date;
+  createTime: Date;
 }

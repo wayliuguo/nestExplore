@@ -1,31 +1,30 @@
 interface UserInfo {
-    id: number;
+  id: number;
 
-    username: string;
+  username: string;
 
-    nickName: string;
+  nickName: string;
 
-    email: string;
+  email: string;
 
-    headPic: string;
+  headPic: string;
 
-    phoneNumber: string;
+  phoneNumber: string;
 
-    isFrozen: boolean;
+  isFrozen: boolean;
 
-    isAdmin: boolean;
+  isAdmin: boolean;
 
-    createTime: number;
+  createTime: number;
 
-    roles: string[];
+  roles: string[];
 
-    permissions: string[]
+  permissions: string[];
 }
 export class LoginUserVo {
+  userInfo: UserInfo;
 
-    userInfo: UserInfo;
+  accessToken: string;
 
-    accessToken: string;
-
-    refreshToken: string;
+  refreshToken: string;
 }
