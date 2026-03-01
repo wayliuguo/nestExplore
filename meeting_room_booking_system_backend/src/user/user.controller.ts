@@ -6,7 +6,6 @@ import {
   Query,
   UnauthorizedException,
   DefaultValuePipe,
-  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -34,11 +33,7 @@ export class UserController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Post('register')
-  async register(@Body() registerUser: RegisterUserDto) {
-    return await this.userService.register(registerUser);
-  }
-
+  // 用户注册验证码
   @Get('register-captcha')
   async captcha(@Query('address') address: string) {
     const code = Math.random().toString().slice(2, 8);
@@ -53,6 +48,7 @@ export class UserController {
     return '发送成功';
   }
 
+  // 用户更改密码验证码
   @RequireLogin()
   @Get('update_password/captcha')
   async updatePasswordCaptcha(@Query('address') address: string) {
@@ -72,6 +68,8 @@ export class UserController {
     return '发送成功';
   }
 
+  // 用户更改用户信息验证码
+  @RequireLogin()
   @Get('update/captcha')
   async updateCaptcha(@Query('address') address: string) {
     const code = Math.random().toString().slice(2, 8);
@@ -90,6 +88,13 @@ export class UserController {
     return '发送成功';
   }
 
+  // 用户注册
+  @Post('register')
+  async register(@Body() registerUser: RegisterUserDto) {
+    return await this.userService.register(registerUser);
+  }
+
+  // 用户登录
   @Post('login')
   async userLogin(@Body() loginUser: LoginUserDto) {
     const vo = await this.userService.login(loginUser, false);
@@ -120,6 +125,7 @@ export class UserController {
     return vo;
   }
 
+  // 用户刷新token
   @Get('refresh')
   async refresh(@Query('refreshToken') refreshToken: string) {
     try {
@@ -161,6 +167,7 @@ export class UserController {
     }
   }
 
+  // 管理员登录
   @Post('admin/login')
   async adminLogin(@Body() loginUser: LoginUserDto) {
     const vo = await this.userService.login(loginUser, true);
@@ -190,6 +197,7 @@ export class UserController {
     return vo;
   }
 
+  // 管理员刷新token
   @Get('admin/refresh')
   async adminRefresh(@Query('refreshToken') refreshToken: string) {
     try {
@@ -229,6 +237,7 @@ export class UserController {
     }
   }
 
+  // 获取用户信息
   @Get('info')
   @RequireLogin()
   async info(@UserInfo('userId') userId: number) {
@@ -247,15 +256,19 @@ export class UserController {
     return vo;
   }
 
+  // 更新用户/管理员密码
   @Post(['update_password', 'admin/update_password'])
   @RequireLogin()
   async updatePassword(
     @UserInfo('userId') userId: number,
     @Body() passwordDto: UpdateUserPasswordDto,
   ) {
-    return await this.userService.updatePassword(userId, passwordDto);
+    const res = await this.userService.updatePassword(userId, passwordDto);
+
+    return res;
   }
 
+  // 更新用户/管理员信息
   @Post(['update', 'admin/update'])
   @RequireLogin()
   async update(
@@ -265,6 +278,7 @@ export class UserController {
     return await this.userService.update(userId, updateUserDto);
   }
 
+  // 冻结用户
   @Get('freeze')
   @RequireLogin()
   async freeze(@Query('id') userId: number) {
@@ -272,6 +286,7 @@ export class UserController {
     return 'success';
   }
 
+  // 获取用户列表
   @RequireLogin()
   @Get('list')
   async list(
@@ -294,11 +309,5 @@ export class UserController {
       pageNo,
       pageSize,
     );
-  }
-
-  @Get('init-data')
-  async initData() {
-    await this.userService.initData();
-    return 'done';
   }
 }

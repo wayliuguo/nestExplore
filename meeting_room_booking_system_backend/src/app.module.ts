@@ -18,6 +18,7 @@ import { PermissionGuard } from './permission.guard';
 
 @Module({
   imports: [
+    // 配置 JWT 模块
     JwtModule.registerAsync({
       global: true,
       useFactory(configService: ConfigService) {
@@ -30,6 +31,7 @@ import { PermissionGuard } from './permission.guard';
       },
       inject: [ConfigService],
     }),
+    // 配置 TypeORM 数据库连接
     TypeOrmModule.forRootAsync({
       useFactory(configService: ConfigService) {
         return {
@@ -51,14 +53,20 @@ import { PermissionGuard } from './permission.guard';
       },
       inject: [ConfigService],
     }),
+    // 导入用户模块
     UserModule,
+    // 导入配置模块
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: 'src/.env',
     }),
+    // 导入权限模块
     PermissionsModule,
+    // 导入角色模块
     RolesModule,
+    // 导入 Redis 模块
     RedisModule,
+    // 导入邮箱模块
     EmailModule,
   ],
   controllers: [AppController],
