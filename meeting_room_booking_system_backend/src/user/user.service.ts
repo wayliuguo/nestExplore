@@ -124,6 +124,7 @@ export class UserService {
       username: user.username,
       isAdmin: user.isAdmin,
       roles: user.roles.map((item) => item.name),
+      email: user.email,
       permissions: user.roles.reduce((arr, item) => {
         item.permissions.forEach((permission) => {
           if (arr.indexOf(permission) === -1) {
@@ -161,8 +162,12 @@ export class UserService {
     }
 
     const foundUser = await this.userRepository.findOneBy({
-      id: userId,
+      username: passwordDto.username,
     });
+
+    if (foundUser.email !== passwordDto.email) {
+      throw new HttpException('邮箱不正确', HttpStatus.BAD_REQUEST);
+    }
 
     foundUser.password = md5(passwordDto.password);
 
