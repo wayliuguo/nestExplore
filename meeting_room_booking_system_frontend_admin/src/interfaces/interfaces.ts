@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 
 const axiosInstance = axios.create({
     // baseURL: 'http://121.40.76.186/api',
-    baseURL: 'http://localhost:3005/',
+    baseURL: 'http://localhost:3000/',
     timeout: 3000
 });
 

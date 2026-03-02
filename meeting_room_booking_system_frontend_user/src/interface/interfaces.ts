@@ -8,7 +8,7 @@ import { SearchBooking } from "../page/booking_history/BookingHistory";
 import { CreateBooking } from '../page/meeting_room_list/CreateBookingModal';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3005/',
+    baseURL: 'http://localhost:3000/',
     timeout: 3000
 });
 

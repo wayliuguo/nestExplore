@@ -49,7 +49,6 @@ export class UserController {
   }
 
   // 用户更改密码验证码
-  @RequireLogin()
   @Get('update_password/captcha')
   async updatePasswordCaptcha(@Query('address') address: string) {
     const code = Math.random().toString().slice(2, 8);
@@ -258,7 +257,6 @@ export class UserController {
 
   // 更新用户/管理员密码
   @Post(['update_password', 'admin/update_password'])
-  @RequireLogin()
   async updatePassword(
     @UserInfo('userId') userId: number,
     @Body() passwordDto: UpdateUserPasswordDto,
