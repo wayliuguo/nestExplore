@@ -338,7 +338,9 @@ export class UserController {
     }),
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log('file', file);
+    if (!file) {
+      throw new BadRequestException('请上传文件');
+    }
     return file.path;
   }
 }
