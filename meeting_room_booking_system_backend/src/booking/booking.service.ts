@@ -2,7 +2,14 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { Booking } from './entities/booking.entity';
-import { Between, EntityManager, LessThanOrEqual, Like, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+  Between,
+  EntityManager,
+  LessThanOrEqual,
+  Like,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { MeetingRoom } from 'src/meeting-room/entities/meeting-room.entity';
 import { RedisService } from 'src/redis/redis.service';
@@ -10,71 +17,84 @@ import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class BookingService {
-
   @InjectEntityManager()
   private entityManager: EntityManager;
 
-  async find(pageNo: number, pageSize: number, username: string, meetingRoomName: string, meetingRoomPosition: string, bookingTimeRangeStart: number, bookingTimeRangeEnd: number ) {
+  async find(
+    pageNo: number,
+    pageSize: number,
+    username: string,
+    meetingRoomName: string,
+    meetingRoomPosition: string,
+    bookingTimeRangeStart: number,
+    bookingTimeRangeEnd: number,
+  ) {
     const skipCount = (pageNo - 1) * pageSize;
 
     const condition: Record<string, any> = {};
 
-    if(username) {
+    if (username) {
       condition.user = {
-        username: Like(`%${username}%`)
-      }
+        username: Like(`%${username}%`),
+      };
     }
 
-    if(meetingRoomName) {
-      condition.room =  {
-        name: Like(`%${meetingRoomName}%`)
-      }
+    if (meetingRoomName) {
+      condition.room = {
+        name: Like(`%${meetingRoomName}%`),
+      };
     }
 
-    if(meetingRoomPosition) {
+    if (meetingRoomPosition) {
       if (!condition.room) {
-        condition.room = {}
+        condition.room = {};
       }
-      condition.room.location = Like(`%${meetingRoomPosition}%`)
+      condition.room.location = Like(`%${meetingRoomPosition}%`);
     }
 
-    if(bookingTimeRangeStart) {
-      if(!bookingTimeRangeEnd) {
-        bookingTimeRangeEnd = bookingTimeRangeStart + 60 * 60 * 1000
+    if (bookingTimeRangeStart) {
+      if (!bookingTimeRangeEnd) {
+        bookingTimeRangeEnd = bookingTimeRangeStart + 60 * 60 * 1000;
       }
-      condition.startTime = Between(new Date(+bookingTimeRangeStart), new Date(+bookingTimeRangeEnd))
+      condition.startTime = Between(
+        new Date(+bookingTimeRangeStart),
+        new Date(+bookingTimeRangeEnd),
+      );
     }
 
-    const [bookings, totalCount] = await this.entityManager.findAndCount(Booking, {
-      where: condition,
-      relations: {
-        user: true,
-        room: true,
+    const [bookings, totalCount] = await this.entityManager.findAndCount(
+      Booking,
+      {
+        where: condition,
+        relations: {
+          user: true,
+          room: true,
+        },
+        skip: skipCount,
+        take: pageSize,
       },
-      skip: skipCount,
-      take: pageSize
-    });
+    );
 
     return {
-      bookings: bookings.map(item => {
+      bookings: bookings.map((item) => {
         delete item.user.password;
         return item;
       }),
-      totalCount
-    }
+      totalCount,
+    };
   }
 
   async add(bookingDto: CreateBookingDto, userId: number) {
     const meetingRoom = await this.entityManager.findOneBy(MeetingRoom, {
-      id: bookingDto.meetingRoomId
+      id: bookingDto.meetingRoomId,
     });
 
-    if(!meetingRoom) {
+    if (!meetingRoom) {
       throw new BadRequestException('会议室不存在');
     }
 
     const user = await this.entityManager.findOneBy(User, {
-      id: userId
+      id: userId,
     });
 
     const booking = new Booking();
@@ -85,44 +105,56 @@ export class BookingService {
 
     const res = await this.entityManager.findOneBy(Booking, {
       room: {
-        id: meetingRoom.id
+        id: meetingRoom.id,
       },
       startTime: LessThanOrEqual(booking.startTime),
-      endTime: MoreThanOrEqual(booking.endTime)
+      endTime: MoreThanOrEqual(booking.endTime),
     });
 
-    if(res) {
+    if (res) {
       throw new BadRequestException('该时间段已被预定');
     }
-    
+
     await this.entityManager.save(Booking, booking);
   }
 
   async apply(id: number) {
-    await this.entityManager.update(Booking, {
-      id
-    }, {
-      status: '审批通过'      
-    });
-    return 'success'
+    await this.entityManager.update(
+      Booking,
+      {
+        id,
+      },
+      {
+        status: '审批通过',
+      },
+    );
+    return 'success';
   }
 
   async reject(id: number) {
-    await this.entityManager.update(Booking, {
-      id
-    }, {
-      status: '审批驳回'      
-    });
-    return 'success'
+    await this.entityManager.update(
+      Booking,
+      {
+        id,
+      },
+      {
+        status: '审批驳回',
+      },
+    );
+    return 'success';
   }
 
   async unbind(id: number) {
-    await this.entityManager.update(Booking, {
-      id
-    }, {
-      status: '已解除'
-    });
-    return 'success'
+    await this.entityManager.update(
+      Booking,
+      {
+        id,
+      },
+      {
+        status: '已解除',
+      },
+    );
+    return 'success';
   }
 
   @Inject(RedisService)
@@ -134,33 +166,33 @@ export class BookingService {
   async urge(id: number) {
     const flag = await this.redisService.get('urge_' + id);
 
-    if(flag) {
+    if (flag) {
       return '半小时内只能催办一次，请耐心等待';
     }
 
     let email = await this.redisService.get('admin_email');
 
-    if(!email) { 
+    if (!email) {
       const admin = await this.entityManager.findOne(User, {
         select: {
-          email: true
+          email: true,
         },
         where: {
-          isAdmin: true
-        }
+          isAdmin: true,
+        },
       });
 
-      email = admin.email
-  
+      email = admin.email;
+
       this.redisService.set('admin_email', admin.email);
     }
 
     this.emailService.sendMail({
       to: email,
       subject: '预定申请催办提醒',
-      html: `id 为 ${id} 的预定申请正在等待审批`
+      html: `id 为 ${id} 的预定申请正在等待审批`,
     });
-    
+
     this.redisService.set('urge_' + id, 1, 60 * 30);
   }
 }

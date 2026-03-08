@@ -19,6 +19,7 @@ import { MeetingRoomModule } from './meeting-room/meeting-room.module';
 import { MeetingRoom } from './meeting-room/entities/meeting-room.entity';
 import { BookingModule } from './booking/booking.module';
 import { Booking } from './booking/entities/booking.entity';
+import { StatisticModule } from './statistic/statistic.module';
 
 @Module({
   imports: [
@@ -76,6 +77,8 @@ import { Booking } from './booking/entities/booking.entity';
     MeetingRoomModule,
     // 导入预约模块
     BookingModule,
+    // 导入统计模块
+    StatisticModule,
   ],
   controllers: [AppController],
   providers: [
