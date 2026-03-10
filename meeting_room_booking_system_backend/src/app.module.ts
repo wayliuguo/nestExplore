@@ -24,6 +24,11 @@ import * as path from 'path';
 
 @Module({
   imports: [
+    // 导入配置模块
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: path.join(__dirname, '.env'),
+    }),
     // 配置 JWT 模块
     JwtModule.registerAsync({
       global: true,
@@ -52,20 +57,15 @@ import * as path from 'path';
           entities: [User, Role, Permission, MeetingRoom, Booking],
           poolSize: 10,
           connectorPackage: 'mysql2',
-          extra: {
-            authPlugin: 'sha256_password',
-          },
+          retryAttempts: 15, // 最多重试15次
+          retryDelay: 2000, // 每次重试间隔2秒
+          connectTimeout: 10000, // 连接超时延长到10秒
         };
       },
       inject: [ConfigService],
     }),
     // 导入用户模块
     UserModule,
-    // 导入配置模块
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: path.join(__dirname, '.env'),
-    }),
     // 导入权限模块
     PermissionsModule,
     // 导入角色模块

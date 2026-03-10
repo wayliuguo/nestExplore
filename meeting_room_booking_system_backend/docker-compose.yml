@@ -5,21 +5,35 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     depends_on:
-      - mysql-container
-      - redis-container
+      # 仅修改这部分 ↓ 新增健康检查条件
+      mysql-container:
+        condition: service_healthy
+      redis-container:
+        condition: service_healthy
     ports:
       - 3000:3000
+    restart: on-failure:5  # 保留之前加的重试策略
     networks:
       - common-network
+
   mysql-container:
-    image: mysql
+    image: mysql:8.0
+    restart: always
     volumes:
       - /Users/well/mysql-data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: meeting_room_booking_system
       MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_INITDB_SKIP_TZINFO: "1"  # 保留之前加的时区配置
     networks:
       - common-network
+    # 保留健康检查配置
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123456", "--silent"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
   redis-container:
     image: redis
     volumes:
@@ -27,6 +41,13 @@ services:
     command: redis-server --requirepass 123456
     networks:
       - common-network
+    # 保留健康检查配置
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "123456", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+
 networks:
   common-network:
     driver: bridge
